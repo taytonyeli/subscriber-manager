@@ -3,7 +3,6 @@
 namespace Tests\Feature;
 
 use App\Models\Account;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
 class ValidateUser extends TestCase
@@ -11,31 +10,6 @@ class ValidateUser extends TestCase
     // use RefreshDatabase;
     const VALID_API_KEY = "1111";
     const INVALID_API_KEY = "12345";
-
-    /**
-     * Check if validation page exists.
-     *
-     * @return void
-     */
-    public function test_page_exists()
-    {
-        $response = $this->get('/');
-
-        $response->assertStatus(200);
-    }
-
-    /**
-     * Check if validation page has correct view.
-     *
-     * @return void
-     */
-    public function test_validate_view()
-    {
-        $view = $this->view('validate');
-
-        $view->assertSee('Enter Your API Key');
-        $view->assertSee('Validate');
-    }
 
     /**
      * Check if validation api fails when wrong key.
@@ -75,6 +49,17 @@ class ValidateUser extends TestCase
     }
 
     /**
+     * Check if new user is forced to add key
+     *
+     * @return void
+     */
+    public function test_new_user_should_add_key()
+    {
+        $response = $this->get('/api/v1/account');
+        $response->assertStatus(401);
+    }
+
+    /**
      * Check if existing user is automatically redirected
      *
      * @return void
@@ -84,7 +69,7 @@ class ValidateUser extends TestCase
         $account = Account::factory()->make([
             'apiKey' => self::VALID_API_KEY,
         ]);
-        $response = $this->get('/');
+        $response = $this->get('/api/v1/account');
         $response->assertRedirect("/subscribers");
 
     }
