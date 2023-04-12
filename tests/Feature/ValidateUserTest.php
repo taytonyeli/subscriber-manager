@@ -7,7 +7,6 @@ use Tests\TestCase;
 
 class ValidateUser extends TestCase
 {
-    // use RefreshDatabase;
     const VALID_API_KEY = "1111";
     const INVALID_API_KEY = "12345";
 
@@ -66,10 +65,14 @@ class ValidateUser extends TestCase
      */
     public function test_existing_user_redirect()
     {
-        $account = Account::factory()->make([
-            'apiKey' => self::VALID_API_KEY,
-        ]);
+        $account = Account::factory()->create();
         $response = $this->get('/api/v1/account');
+
+        // manual cleanup due to lack of migrations
+        $account->delete();
+        $this->assertDeleted($account);
+
+        // assert user redirect
         $response->assertRedirect("/subscribers");
 
     }
