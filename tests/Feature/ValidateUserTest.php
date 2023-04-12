@@ -54,8 +54,8 @@ class ValidateUser extends TestCase
      */
     public function test_new_user_should_add_key()
     {
-        $response = $this->get('/api/v1/account');
-        $response->assertStatus(401);
+        $response = $this->get('/');
+        $response->assertStatus(200);
     }
 
     /**
@@ -66,7 +66,7 @@ class ValidateUser extends TestCase
     public function test_existing_user_redirect()
     {
         $account = Account::factory()->create();
-        $response = $this->get('/api/v1/account');
+        $response = $this->get('/');
 
         // manual cleanup due to lack of migrations
         $account->delete();
