@@ -19,6 +19,11 @@ class ValidateUser extends TestCase
     {
         $response = $this->postJson('/api/v1/account', ['apiKey' => self::INVALID_API_KEY]);
 
+        // should not be savedj
+        $this->assertDatabaseMissing('accounts', [
+            'api_key' => self::INVALID_API_KEY,
+        ]);
+
         $response
             ->assertStatus(401)
             ->assertJson([
@@ -43,7 +48,7 @@ class ValidateUser extends TestCase
 
         // database should have key stored
         $this->assertDatabaseHas('accounts', [
-            'apiKey' => self::VALID_API_KEY,
+            'api_key' => self::VALID_API_KEY,
         ]);
     }
 
