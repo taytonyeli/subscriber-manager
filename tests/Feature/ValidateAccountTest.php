@@ -5,7 +5,7 @@ namespace Tests\Feature;
 use App\Models\Account;
 use Tests\TestCase;
 
-class ValidateUser extends TestCase
+class ValidateAccount extends TestCase
 {
     const VALID_API_KEY = "1111";
     const INVALID_API_KEY = "12345";
