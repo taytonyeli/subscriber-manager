@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Helpers\MailerLiteClient;
 use App\Models\Account;
 use Tests\TestCase;
 
@@ -9,6 +10,28 @@ class ValidateAccount extends TestCase
 {
     const VALID_API_KEY = "1111";
     const INVALID_API_KEY = "12345";
+
+    /**
+     * Check if Mailer Lite API Validation Works With Wrong Key.
+     *
+     * @return void
+     */
+    public function test_validation_with_wrong_key()
+    {
+        $mailerLiteCLient = new MailerLiteClient(self::INVALID_API_KEY);
+        $this->assertFalse($mailerLiteCLient->validate());
+    }
+
+    /**
+     * Check if Mailer Lite API Validation Works With Good Key.
+     *
+     * @return void
+     */
+    public function test_validation_with_good_key()
+    {
+        $mailerLiteCLient = new MailerLiteClient(self::VALID_API_KEY);
+        $this->assertTrue($mailerLiteCLient->validate());
+    }
 
     /**
      * Check if validation api fails when wrong key.
