@@ -8,7 +8,6 @@ use Tests\TestCase;
 
 class ValidateAccount extends TestCase
 {
-    const VALID_API_KEY = "1111";
     const INVALID_API_KEY = "12345";
 
     /**
@@ -29,7 +28,7 @@ class ValidateAccount extends TestCase
      */
     public function test_validation_with_good_key()
     {
-        $mailerLiteCLient = new MailerLiteClient(self::VALID_API_KEY);
+        $mailerLiteCLient = new MailerLiteClient(env('MAILER_LITE_API_KEY', '1111'));
         $this->assertTrue($mailerLiteCLient->validate());
     }
 
@@ -42,7 +41,7 @@ class ValidateAccount extends TestCase
     {
         $response = $this->postJson('/api/v1/account', ['apiKey' => self::INVALID_API_KEY]);
 
-        // should not be savedj
+        // should not be saved
         $this->assertDatabaseMissing('accounts', [
             'api_key' => self::INVALID_API_KEY,
         ]);
@@ -63,15 +62,15 @@ class ValidateAccount extends TestCase
      */
     public function test_validate_api_success()
     {
-        $response = $this->postJson('/api/v1/account', ['apiKey' => self::VALID_API_KEY]);
+        $response = $this->postJson('/api/v1/account', ['apiKey' => env('MAILER_LITE_API_KEY', '1111')]);
 
         // should return right status code with key in body
         $response->assertStatus(200);
-        $this->assertEquals($response['data']['key'], self::VALID_API_KEY);
+        $this->assertEquals($response['data']['key'], env('MAILER_LITE_API_KEY', '1111'));
 
         // database should have key stored
         $this->assertDatabaseHas('accounts', [
-            'api_key' => self::VALID_API_KEY,
+            'api_key' => env('MAILER_LITE_API_KEY', '1111'),
         ]);
     }
 
