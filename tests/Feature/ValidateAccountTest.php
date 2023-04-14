@@ -39,7 +39,7 @@ class ValidateAccount extends TestCase
      */
     public function test_validate_api_fails_wrong_key()
     {
-        $response = $this->postJson('/api/v1/account', ['apiKey' => self::INVALID_API_KEY]);
+        $response = $this->postJson('/', ['apiKey' => self::INVALID_API_KEY]);
 
         // should not be saved
         $this->assertDatabaseMissing('accounts', [
@@ -57,7 +57,7 @@ class ValidateAccount extends TestCase
      */
     public function test_validate_api_success()
     {
-        $response = $this->postJson('/api/v1/account', ['apiKey' => env('MAILER_LITE_API_KEY', '1111')]);
+        $response = $this->postJson('/', ['apiKey' => env('MAILER_LITE_API_KEY', '1111')]);
 
         // database should have key stored
         $this->assertDatabaseHas('accounts', [
