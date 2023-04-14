@@ -22,4 +22,4 @@ Route::get('/', [AccountController::class, 'showOrRedirect']);
 /*
   Backend Routes
  */
-Route::post('/api/v1/account', [AccountController::class, 'addApiKey']);
+Route::post('/', [AccountController::class, 'addApiKey']);

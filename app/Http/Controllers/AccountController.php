@@ -49,8 +49,8 @@ class AccountController extends Controller
             return redirect('/subscribers');
         }
         $unauthorized_error = [
-            'errors' => [
-                ["title" => "Unauthorized", "detail" => "Invalid API Key"],
+            'api_errors' => [
+                ["title" => "Unauthorized", "message" => "Invalid API Key"],
             ],
         ];
         return response()->view('validate', $unauthorized_error, 401);

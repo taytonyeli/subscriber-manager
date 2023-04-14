@@ -2061,6 +2061,7 @@ module.exports = {
 /***/ ((__unused_webpack_module, __unused_webpack_exports, __webpack_require__) => {
 
 __webpack_require__(/*! ./bootstrap */ "./resources/js/bootstrap.js");
+__webpack_require__(/*! ./validate */ "./resources/js/validate.js");
 
 /***/ }),
 
@@ -2097,6 +2098,20 @@ window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 //     cluster: process.env.MIX_PUSHER_APP_CLUSTER,
 //     forceTLS: true
 // });
+
+/***/ }),
+
+/***/ "./resources/js/validate.js":
+/*!**********************************!*\
+  !*** ./resources/js/validate.js ***!
+  \**********************************/
+/***/ (() => {
+
+var validateSubmit = document.getElementById('validate-submit');
+validateSubmit.addEventListener('click', function () {
+  console.log("running");
+  this.disabled = false;
+});
 
 /***/ }),
 
