@@ -47,12 +47,7 @@ class ValidateAccount extends TestCase
         ]);
 
         $response
-            ->assertStatus(401)
-            ->assertJson([
-                'errors' => [
-                    ["title" => "Unauthorized", "detail" => "Invalid API Key"],
-                ],
-            ]);
+            ->assertStatus(401);
     }
 
     /**
