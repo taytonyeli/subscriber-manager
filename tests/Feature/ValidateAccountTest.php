@@ -64,14 +64,18 @@ class ValidateAccount extends TestCase
     {
         $response = $this->postJson('/api/v1/account', ['apiKey' => env('MAILER_LITE_API_KEY', '1111')]);
 
-        // should return right status code with key in body
-        $response->assertStatus(200);
-        $this->assertEquals($response['data']['key'], env('MAILER_LITE_API_KEY', '1111'));
-
         // database should have key stored
         $this->assertDatabaseHas('accounts', [
             'api_key' => env('MAILER_LITE_API_KEY', '1111'),
         ]);
+
+        // manual cleanup due to lack of migrations
+        $account = Account::firstWhere('api_key', env('MAILER_LITE_API_KEY', '1111'));
+        $account->delete();
+        $this->assertDeleted($account);
+
+        // should redirect to dashboard if successful
+        $response->assertRedirect();
     }
 
     /**
