@@ -29,16 +29,43 @@ class MailerLiteClient
      **/
     public function validate()
     {
-        $subscriberCountEndPoint = "/api/subscribers?limit=0";
+        $subscriberCountEndPoint = "/api/subscribers";
         $response = Http::withHeaders([
             'Authorization' => "Bearer $this->apiKey",
         ])->withOptions([
             'verify' => false,
-        ])->get(self::MAILER_LITE_API_HOST . $subscriberCountEndPoint);
+        ])->get(self::MAILER_LITE_API_HOST . $subscriberCountEndPoint, [
+            'limit' => 0,
+        ]);
 
         if ($response->ok()) {
             return true;
         }
         return false;
+    }
+
+    /**
+     * Fetches a list of subscribers
+     *
+     *
+     * @param int $limit max number of items returned
+     * @return array
+     **/
+    public function getSubscribers(int $limit = 25)
+    {
+        $getSubscribersEndPoint = "/api/subscribers";
+        $response = Http::withHeaders([
+            'Authorization' => "Bearer $this->apiKey",
+        ])->withOptions([
+            'verify' => false,
+        ])->get(self::MAILER_LITE_API_HOST . $getSubscribersEndPoint, [
+            'limit' => $limit,
+        ]);
+
+        if ($response->ok()) {
+            $subscriberResponse = $response->json();
+            return $subscriberResponse["data"];
+        }
+        return [];
     }
 }
