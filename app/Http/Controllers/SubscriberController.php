@@ -30,7 +30,7 @@ class SubscriberController extends Controller
         $dataTablesHelper = new DataTablesHelper($request->query('draw'));
         $finalResponse = [
             'draw' => $dataTablesHelper->getDraw(),
-            'data' => $data,
+            'data' => $dataTablesHelper->getStructuredData($data),
             'recordsTotal' => $count,
             'recordsFiltered' => $count,
         ];
