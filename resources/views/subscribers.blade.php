@@ -14,29 +14,23 @@
     </head>
     <body class="antialiased">
         <main class="container mx-auto p-4">
-            <h1 class="text-center text-2xl">
+            <h1 class="text-center text-2xl mb-10">
                 Welcome to Your Dashboard
             </h1>
-            <table id="subscribers-table" class="display" style="width:100%">
-            <thead>
-                <tr>
-                    <th>Email</th>
-                    <th>Name</th>
-                    <th>Country</th>
-                    <th>Subscribe Date</th>
-                    <th>Subscribe Time</th>
-                </tr>
-            </thead>
-            <tfoot>
-                <tr>
-                    <th>Email</th>
-                    <th>Name</th>
-                    <th>Country</th>
-                    <th>Subscribe Date</th>
-                    <th>Subscribe Time</th>
-                </tr>
-            </tfoot>
-        </table>
+            <div class="p-4 border-2 border-gray-500 drop-shadow-xl">
+                <table id="subscribers-table" class="display" style="width:100%">
+                    <thead>
+                        <tr>
+                            <th>Email</th>
+                            <th>Name</th>
+                            <th>Country</th>
+                            <th>Subscribe Date</th>
+                            <th>Subscribe Time</th>
+                        </tr>
+                    </thead>
+                </table>
+            </div>
+
         </main>
 
 
