@@ -95,6 +95,7 @@ class DataTablesTest extends TestCase
                     'country',
                     'subscribed_at_date',
                     'subscribed_at_time',
+                    'DT_RowId'
                 ],
             ],
         ]);
