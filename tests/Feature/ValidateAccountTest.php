@@ -102,4 +102,10 @@ class ValidateAccount extends TestCase
         $response->assertRedirect("/subscribers");
 
     }
+
+    public function tearDown(): void
+    {
+        Account::truncate();
+        parent::tearDown();
+    }
 }
