@@ -68,4 +68,28 @@ class MailerLiteClient
         }
         return [];
     }
+
+    /**
+     * Retrieves total subscriber count
+     *
+     *
+     * @return int
+     **/
+    public function getSubscriberCount()
+    {
+        $getSubscribersEndPoint = "/api/subscribers";
+        $response = Http::withHeaders([
+            'Authorization' => "Bearer $this->apiKey",
+        ])->withOptions([
+            'verify' => false,
+        ])->get(self::MAILER_LITE_API_HOST . $getSubscribersEndPoint, [
+            'limit' => 0,
+        ]);
+
+        if ($response->ok()) {
+            $subscriberResponse = $response->json();
+            return $subscriberResponse["total"];
+        }
+        return 0;
+    }
 }
