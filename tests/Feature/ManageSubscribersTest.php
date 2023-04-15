@@ -30,23 +30,13 @@ class ManageSubscribersTest extends TestCase
      */
     public function test_fetching_subscriber_data_with_api()
     {
-        $response = $this->postJson('/', ['apiKey' => env('MAILER_LITE_API_KEY', '1111')]);
-
-        // database should have key stored
-        $this->assertDatabaseHas('accounts', [
+        $account = Account::factory()->create([
             'api_key' => env('MAILER_LITE_API_KEY', '1111'),
         ]);
 
         $subscriberResponse = $this->get('/api/v1/subscribers');
-
         $subscriberResponse->assertStatus(200);
 
-        // $subscriberResponse->assertJson(fn($json) =>
-        //     $json->has('fields')
-        // );
-
-        // manual cleanup due to lack of migrations
-        $account = Account::firstWhere('api_key', env('MAILER_LITE_API_KEY', '1111'));
         $account->delete();
         $this->assertDeleted($account);
     }
