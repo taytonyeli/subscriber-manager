@@ -26,11 +26,9 @@ class AccountController extends Controller
     /**
      * Save Client API Key
      *
-     * Undocumented function long description
      *
-     * @param Type $var Description
-     * @return type
-     * @throws conditon
+     * @param Illuminate\Http\Request $request Request object
+     * @return Illuminate\Http\Response
      **/
     public function addApiKey(Request $request)
     {
