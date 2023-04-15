@@ -78,9 +78,9 @@ class DataTablesHelper
     {
 
         $email = Arr::get($mailerLiteSubscriber, 'email');
-        $name = Arr::get($mailerLiteSubscriber, 'fields.name', "");
-        $country = Arr::get($mailerLiteSubscriber, 'fields.country', "");
-        $subscribedAt = Arr::get($mailerLiteSubscriber, 'subscribed_at', "");
+        $name = Arr::get($mailerLiteSubscriber, 'fields.name');
+        $country = Arr::get($mailerLiteSubscriber, 'fields.country');
+        $subscribedAt = Arr::get($mailerLiteSubscriber, 'subscribed_at');
 
         $formattedDate = $this->formatMailerLiteDate($subscribedAt);
         $extractedData = [
