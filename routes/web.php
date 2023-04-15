@@ -18,6 +18,7 @@ use Illuminate\Support\Facades\Route;
   Frontend Routes
  */
 Route::get('/', [AccountController::class, 'showOrRedirect']);
+Route::get('/subscribers', [AccountController::class, 'showSubscribers']);
 
 /*
   Backend Routes

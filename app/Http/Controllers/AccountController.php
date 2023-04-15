@@ -54,6 +54,20 @@ class AccountController extends Controller
             ],
         ];
         return response()->view('validate', $unauthorized_error, 401);
+    }
 
+    /**
+     * Show subscribers page
+     *
+     *
+     * @return \Illuminate\View\View
+     **/
+    public function showSubscribers()
+    {
+        $account = Account::first();
+        if (isset($account)) {
+            return view('subscribers');
+        }
+        return redirect('/');
     }
 }
