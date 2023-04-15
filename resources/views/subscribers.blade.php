@@ -17,7 +17,29 @@
             <h1 class="text-center text-2xl">
                 Welcome to Your Dashboard
             </h1>
+            <table id="subscribers-table" class="display" style="width:100%">
+            <thead>
+                <tr>
+                    <th>Email</th>
+                    <th>Name</th>
+                    <th>Country</th>
+                    <th>Subscribe Date</th>
+                    <th>Subscribe Time</th>
+                </tr>
+            </thead>
+            <tfoot>
+                <tr>
+                    <th>Email</th>
+                    <th>Name</th>
+                    <th>Country</th>
+                    <th>Subscribe Date</th>
+                    <th>Subscribe Time</th>
+                </tr>
+            </tfoot>
+        </table>
         </main>
+
+
 
 
         <!-- Scripts -->
