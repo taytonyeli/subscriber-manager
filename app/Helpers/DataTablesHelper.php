@@ -77,6 +77,7 @@ class DataTablesHelper
     public function extractStructuredData($mailerLiteSubscriber)
     {
 
+        $id = Arr::get($mailerLiteSubscriber, 'id');
         $email = Arr::get($mailerLiteSubscriber, 'email');
         $name = Arr::get($mailerLiteSubscriber, 'fields.name');
         $country = Arr::get($mailerLiteSubscriber, 'fields.country');
@@ -84,6 +85,7 @@ class DataTablesHelper
 
         $formattedDate = $this->formatMailerLiteDate($subscribedAt);
         $extractedData = [
+            'DT_RowId' => $id,
             'email' => $email,
             'name' => $name,
             'country' => $country,
