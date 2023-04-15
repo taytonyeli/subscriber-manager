@@ -1,5 +1,5 @@
 $(document).ready(function () {
-    alert('jquery and dt ready')
+    // alert('jquery and dt ready')
     $('#subscribers-table').DataTable({
         serverSide: true,
         ajax: '/api/v1/subscribers',
