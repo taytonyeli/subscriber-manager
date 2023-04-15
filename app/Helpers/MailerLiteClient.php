@@ -135,4 +135,27 @@ class MailerLiteClient
             "message" => "There was an error processing your request",
         ];
     }
+
+    
+
+    /**
+     * Delete a subscriber by id
+     *
+     * @param string $subscriberId subscriber id
+     * @return boolean
+     **/
+    public function deleteSubscriber($subscriberId)
+    {
+        $deleteSubscriberEndPoint = "/api/subscribers/" . $subscriberId;
+        $response = Http::withHeaders([
+            'Authorization' => "Bearer $this->apiKey",
+        ])->withOptions([
+            'verify' => false,
+        ])->delete(self::MAILER_LITE_API_HOST . $deleteSubscriberEndPoint);
+
+        if ($response->status() === 204) {
+            return true;
+        }
+        return false;
+    }
 }

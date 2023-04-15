@@ -15,3 +15,4 @@ use Illuminate\Support\Facades\Route;
  */
 
 Route::get('/v1/subscribers', [SubscriberController::class, "getSubscribers"]);
+Route::delete('/v1/subscribers/{id}', [SubscriberController::class, "deleteSubscriber"]);

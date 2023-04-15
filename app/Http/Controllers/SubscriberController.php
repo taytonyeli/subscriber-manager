@@ -36,4 +36,23 @@ class SubscriberController extends Controller
         ];
         return response()->json($finalResponse);
     }
+
+    /**
+     * Get subscribers
+     *
+     *
+     * @param string $id user id
+     * @return Illuminate\Http\Response
+     **/
+    public function deleteSubscriber($id)
+    {
+        $account = Account::first();
+        $mailerLiteCLient = new MailerLiteClient($account->api_key);
+        $result = $mailerLiteCLient->deleteSubscriber($id);
+
+        if ($result) {
+            return response()->noContent();
+        }
+        return response([], 404);
+    }
 }
