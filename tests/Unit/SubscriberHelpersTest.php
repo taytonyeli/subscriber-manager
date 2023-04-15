@@ -78,7 +78,7 @@ class SubscriberHelpersTest extends TestCase
 
         $this->assertEquals($parsedSubscriber["email"], $result["email"]);
         $this->assertEquals($parsedSubscriber["fields"]["name"], $result["name"]);
-        $this->assertEquals("--", $result["country"]);
+        $this->assertEquals(null, $result["country"]);
         $this->assertEquals("11/04/2023", $result["subscribed_at_date"]);
         $this->assertEquals("21:33", $result["subscribed_at_time"]);
     }
