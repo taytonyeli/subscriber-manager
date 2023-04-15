@@ -44,7 +44,7 @@ class ManageSubscribersTest extends TestCase
     }
 
     /**
-     * Test fetching subscriber data via API.
+     * Test creating subscriber
      *
      * @return void
      */
@@ -67,7 +67,7 @@ class ManageSubscribersTest extends TestCase
     }
 
     /**
-     * Test fetching subscriber data via API.
+     * Test creating subscriber via API.
      *
      * @return void
      */
@@ -86,7 +86,70 @@ class ManageSubscribersTest extends TestCase
             ]);
         $subscriberResponse->assertStatus(200);
 
-        
+        $account->delete();
+        $this->assertDeleted($account);
+
+    }
+
+    /**
+     * Test deleting subscriber.
+     *
+     * @return void
+     */
+    public function test_deleting_subscriber()
+    {
+        $mailerLiteCLient = new MailerLiteClient(env('MAILER_LITE_API_KEY', '1111'));
+        $limit = 1;
+        $data = $mailerLiteCLient->getSubscribers($limit);
+        $this->assertNotEmpty($data);
+        $this->assertIsArray($data);
+        $this->assertLessThanOrEqual($limit, sizeof($data));
+
+        $totalCount = $mailerLiteCLient->getSubscriberCount();
+
+        $subscriber = $data[0];
+        $this->assertArrayHasKey("id", $subscriber);
+
+        $subscriberId = $subscriber["id"];
+        $result = $mailerLiteCLient->deleteSubscriber($subscriberId);
+
+        $postTotalCount = $mailerLiteCLient->getSubscriberCount();
+
+        $this->assertTrue($result);
+        $this->assertEquals($totalCount - 1, $postTotalCount);
+
+    }
+
+    /**
+     * Test deleting subscriber using json api.
+     *
+     * @return void
+     */
+    public function test_deleting_subscriber_via_api()
+    {
+        $account = Account::factory()->create([
+            'api_key' => env('MAILER_LITE_API_KEY', '1111'),
+        ]);
+
+        $mailerLiteCLient = new MailerLiteClient(env('MAILER_LITE_API_KEY', '1111'));
+        $limit = 1;
+        $data = $mailerLiteCLient->getSubscribers($limit);
+        $this->assertNotEmpty($data);
+        $this->assertIsArray($data);
+        $this->assertLessThanOrEqual($limit, sizeof($data));
+
+        $totalCount = $mailerLiteCLient->getSubscriberCount();
+
+        $subscriber = $data[0];
+        $this->assertArrayHasKey("id", $subscriber);
+
+        $subscriberId = $subscriber["id"];
+        $subscriberResponse = $this->delete('/api/v1/subscribers/' . $subscriberId);
+        $subscriberResponse->assertStatus(204);
+
+        $postTotalCount = $mailerLiteCLient->getSubscriberCount();
+        $this->assertEquals($totalCount - 1, $postTotalCount);
+
         $account->delete();
         $this->assertDeleted($account);
 
