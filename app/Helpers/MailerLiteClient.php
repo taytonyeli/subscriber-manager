@@ -92,4 +92,47 @@ class MailerLiteClient
         }
         return 0;
     }
+
+    /**
+     * Retrieves total subscriber count
+     *
+     * @param \App\Models\MailerLiteSubscriber $subscriber subscriber object
+     *
+     * @return int
+     **/
+    public function createSubscriber($subscriber)
+    {
+        $createSubscriberEndPoint = "/api/subscribers";
+        $response = Http::withHeaders([
+            'Authorization' => "Bearer $this->apiKey",
+        ])->withOptions([
+            'verify' => false,
+        ])->post(self::MAILER_LITE_API_HOST . $createSubscriberEndPoint, $subscriber->getAsArrayForAPI());
+
+        if ($response->status() === 201) {
+            return
+                [
+                "message" => "Successfully Created Subscriber",
+            ];
+        }
+        if ($response->status() === 200) {
+            return
+                [
+                "errors" => [
+                    "email" => ["Subscriber with email $subscriber->email already exists"],
+                ],
+                "message" => "Subscriber with email $subscriber->email already exists",
+            ];
+        }
+        if ($response->status() === 422) {
+            return $response->json();
+        }
+        return
+            [
+            "errors" => [
+                "email" => ["Subscriber with email $subscriber->email already exists"],
+            ],
+            "message" => "There was an error processing your request",
+        ];
+    }
 }

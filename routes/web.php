@@ -14,13 +14,15 @@ use Illuminate\Support\Facades\Route;
 |
  */
 
- /*
-  Frontend Routes
+/*
+Frontend Routes
  */
 Route::get('/', [AccountController::class, 'showOrRedirect']);
 Route::get('/subscribers', [AccountController::class, 'showSubscribers']);
+Route::get('/create-subscriber', [AccountController::class, 'showAddSubscriber']);
 
 /*
-  Backend Routes
+Backend Routes
  */
 Route::post('/', [AccountController::class, 'addApiKey']);
+Route::post('/create-subscriber', [AccountController::class, 'addSubscriber']);
