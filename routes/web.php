@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AccountController;
+use App\Http\Controllers\SubscriberController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -15,14 +16,14 @@ use Illuminate\Support\Facades\Route;
  */
 
 /*
-Frontend Routes
+Accounts Routes
  */
 Route::get('/', [AccountController::class, 'showOrRedirect']);
-Route::get('/subscribers', [AccountController::class, 'showSubscribers']);
-Route::get('/create-subscriber', [AccountController::class, 'showAddSubscriber']);
+Route::post('/', [AccountController::class, 'addApiKey']);
 
 /*
-Backend Routes
+Subscriber Routes
  */
-Route::post('/', [AccountController::class, 'addApiKey']);
-Route::post('/create-subscriber', [AccountController::class, 'addSubscriber']);
+Route::get('/subscribers', [SubscriberController::class, 'showSubscribers']);
+Route::get('/create-subscriber', [SubscriberController::class, 'showAddSubscriber']);
+Route::post('/create-subscriber', [SubscriberController::class, 'addSubscriber']);

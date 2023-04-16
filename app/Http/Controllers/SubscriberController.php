@@ -2,57 +2,77 @@
 
 namespace App\Http\Controllers;
 
-use App\Helpers\DataTablesHelper;
 use App\Helpers\MailerLiteClient;
 use App\Models\Account;
+use App\Models\MailerLiteSubscriber;
 use Illuminate\Http\Request;
 
 class SubscriberController extends Controller
 {
     /**
-     * Get subscribers
+     * Show subscribers page
+     *
+     *
+     * @return \Illuminate\View\View
+     **/
+    public function showSubscribers()
+    {
+        $account = Account::first();
+        if (isset($account)) {
+            return view('subscribers');
+        }
+        return redirect('/');
+    }
+
+    /**
+     * Show new subscriber page
+     *
+     *
+     * @return \Illuminate\View\View
+     **/
+    public function showAddSubscriber()
+    {
+        $account = Account::first();
+        if (isset($account)) {
+            return view('new-subscriber');
+        }
+        return redirect('/');
+    }
+
+    /**
+     * Add New Subscriber API Key
      *
      *
      * @param Illuminate\Http\Request $request Request object
      * @return Illuminate\Http\Response
      **/
-    public function getSubscribers(Request $request)
+    public function addSubscriber(Request $request)
     {
         $request->validate([
-            'draw' => 'nullable|max:1024',
+            'email' => 'bail|email|required|max:255',
+            'name' => 'bail|required|max:255',
+            'country' => 'required|max:255',
         ]);
+
+        $email = $request->input('email');
+        $name = $request->input('name');
+        $country = $request->input('country');
+
         $account = Account::first();
-        $mailerLiteCLient = new MailerLiteClient($account->api_key);
-
-        $data = $mailerLiteCLient->getSubscribers();
-        $count = $mailerLiteCLient->getSubscriberCount();
-
-        $dataTablesHelper = new DataTablesHelper($request->query('draw'));
-        $finalResponse = [
-            'draw' => $dataTablesHelper->getDraw(),
-            'data' => $dataTablesHelper->getStructuredData($data),
-            'recordsTotal' => $count,
-            'recordsFiltered' => $count,
-        ];
-        return response()->json($finalResponse);
-    }
-
-    /**
-     * Get subscribers
-     *
-     *
-     * @param string $id user id
-     * @return Illuminate\Http\Response
-     **/
-    public function deleteSubscriber($id)
-    {
-        $account = Account::first();
-        $mailerLiteCLient = new MailerLiteClient($account->api_key);
-        $result = $mailerLiteCLient->deleteSubscriber($id);
-
-        if ($result) {
-            return response()->noContent();
+        if (!isset($account)) {
+            return redirect('/');
         }
-        return response([], 404);
+        $mailerLiteCLient = new MailerLiteClient($account->api_key);
+        $subscriber = new MailerLiteSubscriber(
+            $email,
+            $name,
+            $country
+        );
+        $result = $mailerLiteCLient->createSubscriber($subscriber);
+
+        if (!isset($result["errors"])) {
+            return response()->view('new-subscriber', $result, 200);
+        }
+        return response()->view('new-subscriber', $result, 422);
     }
 }

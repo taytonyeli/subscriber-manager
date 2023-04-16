@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Controllers\SubscriberController;
+use App\Http\Controllers\SubscriberApiController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -14,5 +14,8 @@ use Illuminate\Support\Facades\Route;
 |
  */
 
-Route::get('/v1/subscribers', [SubscriberController::class, "getSubscribers"]);
-Route::delete('/v1/subscribers/{id}', [SubscriberController::class, "deleteSubscriber"]);
+/*
+Subscriber API Routes
+ */
+Route::get('/v1/subscribers', [SubscriberApiController::class, "getSubscribers"]);
+Route::delete('/v1/subscribers/{id}', [SubscriberApiController::class, "deleteSubscriber"]);
