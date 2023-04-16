@@ -19,20 +19,30 @@ class SubscriberApiController extends Controller
     public function getSubscribers(Request $request)
     {
         $request->validate([
-            'draw' => 'nullable|max:1024',
+            'draw' => 'nullable|numeric|max:1024',
+            'length' => 'nullable|numeric|max:200',
+            'start' => 'nullable|numeric|max:1024',
         ]);
         $account = Account::first();
         $mailerLiteCLient = new MailerLiteClient($account->api_key);
 
-        $data = $mailerLiteCLient->getSubscribers();
+        $length = $request->has('length') ? $request->query('length') : 25;
+        $start = $request->has('start') ? $request->query('start') : 0;
+
+
         $count = $mailerLiteCLient->getSubscriberCount();
 
-        $dataTablesHelper = new DataTablesHelper($request->query('draw'));
+        $dataTablesHelper = new DataTablesHelper($request->query('draw'), $length, $start);
+
+
+        $data = $mailerLiteCLient->getSubscribers($length, $dataTablesHelper->getMailerLitePage());
+
         $finalResponse = [
             'draw' => $dataTablesHelper->getDraw(),
             'data' => $dataTablesHelper->getStructuredData($data),
             'recordsTotal' => $count,
             'recordsFiltered' => $count,
+            'page' => $dataTablesHelper->getMailerLitePage()
         ];
         return response()->json($finalResponse);
     }

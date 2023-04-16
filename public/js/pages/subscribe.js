@@ -2,6 +2,7 @@ $(document).ready(function () {
     // alert('jquery and dt ready')
     let subscriberTable = $('#subscribers-table').DataTable({
         serverSide: true,
+        processing: true,
         ajax: '/api/v1/subscribers',
         columns: [
             { data: 'email' },

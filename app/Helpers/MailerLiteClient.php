@@ -49,24 +49,39 @@ class MailerLiteClient
      *
      *
      * @param int $limit max number of items returned
+     * @param int $page desired page
      * @return array
      **/
-    public function getSubscribers(int $limit = 25)
+    public function getSubscribers(int $limit = 25, int $page = 1)
     {
         $getSubscribersEndPoint = "/api/subscribers";
-        $response = Http::withHeaders([
-            'Authorization' => "Bearer $this->apiKey",
-        ])->withOptions([
-            'verify' => false,
-        ])->get(self::MAILER_LITE_API_HOST . $getSubscribersEndPoint, [
-            'limit' => $limit,
-        ]);
 
-        if ($response->ok()) {
-            $subscriberResponse = $response->json();
-            return $subscriberResponse["data"];
+        $subscribers = [];
+        $cursor = null;
+        // CRAZY WAY TO GET PAGES BECAUSE API HAS NO SKIP
+        for ($index = 0; $index < $page; $index++) {
+
+            $requestParams = [];
+            if (isset($cursor)) {
+                $requestParams["cursor"] = $cursor;
+            }
+            $requestParams["limit"] = $limit;
+
+            $response = Http::withHeaders([
+                'Authorization' => "Bearer $this->apiKey",
+            ])->withOptions([
+                'verify' => false,
+            ])->get(self::MAILER_LITE_API_HOST . $getSubscribersEndPoint, $requestParams);
+
+            if ($response->ok()) {
+                $subscriberResponse = $response->json();
+                $cursor = $subscriberResponse["meta"]["next_cursor"];
+                $subscribers = $subscriberResponse["data"];
+            }
         }
-        return [];
+
+
+        return $subscribers;
     }
 
     /**

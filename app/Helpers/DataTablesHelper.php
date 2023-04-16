@@ -40,6 +40,9 @@ class DataTablesHelper
      **/
     public function getMailerLitePage()
     {
+        if ((int) $this->length === 0) {
+            return 0;
+        }
         $page = ((int) floor($this->start / $this->length)) + 1;
         return $page;
     }
