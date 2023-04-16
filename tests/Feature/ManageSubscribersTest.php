@@ -155,6 +155,99 @@ class ManageSubscribersTest extends TestCase
 
     }
 
+    /**
+     * Test updating subscriber.
+     *
+     * @return void
+     */
+    public function test_updating_subscriber()
+    {
+        // initial setup
+        $faker = Factory::create();
+        $mailerLiteCLient = new MailerLiteClient(env('MAILER_LITE_API_KEY', '1111'));
+
+        // get a subscriber to test
+        $limit = 1;
+        $data = $mailerLiteCLient->getSubscribers($limit);
+        $this->assertNotEmpty($data);
+        $this->assertIsArray($data);
+        $this->assertLessThanOrEqual($limit, sizeof($data));
+
+        // check and use relevant details
+        $subscriber = $data[0];
+        $this->assertArrayHasKey("id", $subscriber);
+        $this->assertArrayHasKey("email", $subscriber);
+        $subscriberId = $subscriber["id"];
+        $subscriberEmail = $subscriber["id"];
+
+        // create subscriber to update
+        $subscriber = new MailerLiteSubscriber(
+            $subscriberEmail,
+            $faker->name(),
+            $faker->country()
+        );
+
+        // update
+        $result = $mailerLiteCLient->updateSubscriber($subscriberId, $subscriber);
+
+        // check successful response
+        $this->assertIsArray($result);
+        $this->assertArrayHasKey("message", $result);
+        $this->assertArrayHasKey("data", $result);
+        $this->assertArrayNotHasKey("errors", $result);
+        $this->assertStringContainsString("Updated", $result["message"]);
+
+        // check data actually updated
+        $updatedData = $result["data"];
+        $this->assertArrayHasKey("fields", $updatedData);
+        $this->assertEquals($subscriber->fields->name, $updatedData["fields"]["name"]);
+        $this->assertEquals($subscriber->fields->country, $updatedData["fields"]["country"]);
+
+    }
+
+    
+    /**
+     * Test updating subscriber via api.
+     *
+     * @return void
+     */
+    public function test_updating_subscriber_via_api()
+    {
+        // initial setup
+        $faker = Factory::create();
+        $mailerLiteCLient = new MailerLiteClient(env('MAILER_LITE_API_KEY', '1111'));
+
+        // get a subscriber to test
+        $limit = 1;
+        $data = $mailerLiteCLient->getSubscribers($limit);
+        $this->assertNotEmpty($data);
+        $this->assertIsArray($data);
+        $this->assertLessThanOrEqual($limit, sizeof($data));
+
+        // check and use relevant details
+        $subscriber = $data[0];
+        $this->assertArrayHasKey("id", $subscriber);
+        $this->assertArrayHasKey("email", $subscriber);
+        $subscriberId = $subscriber["id"];
+        $subscriberEmail = $subscriber["id"];
+
+        // create subscriber to update
+        $subscriber = new MailerLiteSubscriber(
+            $subscriberEmail,
+            $faker->name(),
+            $faker->country()
+        );
+
+        // update using api
+        $subscriberResponse = $this->put('/api/v1/subscribers/' . $subscriberId);
+
+        // check success
+        $subscriberResponse->assertStatus(200);
+
+
+    }
+
+
     public function tearDown(): void
     {
         Account::truncate();
