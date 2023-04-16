@@ -252,6 +252,37 @@ class ManageSubscribersTest extends TestCase
 
     }
 
+    /**
+     * Test fetching subscriber data.
+     *
+     * @return void
+     */
+    public function test_fetching_single_subscriber()
+    {
+        $mailerLiteCLient = new MailerLiteClient(env('MAILER_LITE_API_KEY', '1111'));
+        $limit = 1;
+        $data = $mailerLiteCLient->getSubscribers($limit);
+        $this->assertNotEmpty($data);
+        $this->assertIsArray($data);
+        $this->assertLessThanOrEqual($limit, sizeof($data));
+
+        $subscriber = $data[0];
+        $this->assertArrayHasKey("id", $subscriber);
+        $subscriberId = $subscriber["id"];
+
+        $result = $mailerLiteCLient->getSubscriber($subscriberId);
+        $this->assertArrayHasKey("message", $result);
+        $this->assertArrayHasKey("data", $result);
+        $this->assertArrayNotHasKey("errors", $result);
+        
+        // check and use relevant details
+        $subscriber = $result["data"];
+        $this->assertArrayHasKey("id", $subscriber);
+        $this->assertArrayHasKey("email", $subscriber);
+        $this->assertEquals($subscriberId, $subscriber["id"]);
+
+    }
+
 
     public function tearDown(): void
     {
