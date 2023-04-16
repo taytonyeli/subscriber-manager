@@ -24,28 +24,27 @@
         <h1 class="text-center text-2xl">Welcome to Your Dashboard</h1>
       </header>
       <div>
-      <a
+        <a
           class="mt-3 w-full rounded-sm py-1 px-4 text-center text-sm ring-1 ring-black"
           href="/create-subscriber"
-          >
-          + Create Subscriber
-          </a
         >
-        <div class="mt-3 p-4 border-2 border-gray-500 drop-shadow-xl">
-        <table id="subscribers-table" class="display" style="width: 100%">
-          <thead>
-            <tr>
-              <th>Email</th>
-              <th>Name</th>
-              <th>Country</th>
-              <th>Subscribe Date</th>
-              <th>Subscribe Time</th>
-            </tr>
-          </thead>
-        </table>
+          + Create Subscriber
+        </a>
+        <div class="mt-3 p-4 border-2 border-gray-500 drop-shadow-xl overflow-y-scroll">
+          <table id="subscribers-table" class="display">
+            <thead>
+              <tr>
+                <th>Email</th>
+                <th>Name</th>
+                <th>Country</th>
+                <th>Subscribe Date</th>
+                <th>Subscribe Time</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+          </table>
+        </div>
       </div>
-      </div>
-
     </main>
 
     <!-- Scripts -->
@@ -55,6 +54,6 @@
       crossorigin="anonymous"
     ></script>
     <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.js"></script>
-    <script src="{{ asset('js/subscribe.js') }}"></script>
+    <script src="{{ asset('js/pages/subscribe.js') }}"></script>
   </body>
 </html>
