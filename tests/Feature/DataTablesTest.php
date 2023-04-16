@@ -20,7 +20,7 @@ class DataTablesTest extends TestCase
      *
      * @return void
      */
-    public function test_subscribers_has_data_tables_meta()
+    public function test_subscriber_response_has_data_tables_meta()
     {
         $account = Account::factory()->create([
             'api_key' => env('MAILER_LITE_API_KEY', '1111'),
@@ -48,7 +48,7 @@ class DataTablesTest extends TestCase
      *
      * @return void
      */
-    public function test_subscribers_updated_draw()
+    public function test_subscriber_response_updates_draw()
     {
         $account = Account::factory()->create([
             'api_key' => env('MAILER_LITE_API_KEY', '1111'),
@@ -71,7 +71,7 @@ class DataTablesTest extends TestCase
      *
      * @return void
      */
-    public function test_subscribers_has_right_data_structure()
+    public function test_subscriber_response_has_right_data_structure()
     {
         $account = Account::factory()->create([
             'api_key' => env('MAILER_LITE_API_KEY', '1111'),

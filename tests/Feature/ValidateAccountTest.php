@@ -55,7 +55,7 @@ class ValidateAccount extends TestCase
      *
      * @return void
      */
-    public function test_validate_api_success()
+    public function test_validate_api_succeeds_right_key()
     {
         $response = $this->postJson('/', ['apiKey' => env('MAILER_LITE_API_KEY', '1111')]);
 
@@ -89,7 +89,7 @@ class ValidateAccount extends TestCase
      *
      * @return void
      */
-    public function test_existing_user_redirect()
+    public function test_existing_user_gets_redirected()
     {
         $account = Account::factory()->create();
         $response = $this->get('/');

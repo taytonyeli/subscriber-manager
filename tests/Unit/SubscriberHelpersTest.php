@@ -12,7 +12,7 @@ class SubscriberHelpersTest extends TestCase
      *
      * @return void
      */
-    public function test_date_format()
+    public function test_desired_date_format()
     {
 
         $dataTablesHelper = new DataTablesHelper();
