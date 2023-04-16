@@ -23,12 +23,13 @@
       <header class="mb-10">
         <h1 class="text-center text-2xl">Edit a subscriber</h1>
       </header>
-      <form method="POST" action="/edit-subscriber" class="mx-auto w-1/2">
+      <form method="POST" action="/edit-subscriber/{{$id}}" class="mx-auto w-1/2">
         <div class="mt-3">
           <label for="email" class="w-full">Email:</label>
           <input
             readonly
             type="email"
+            value="{{$email}}"
             name="email"
             id="email"
             class="w-full py-1 px-4 text-sm ring-1 ring-black"
@@ -40,6 +41,7 @@
           <input
             type="text"
             name="name"
+            value="{{$name}}"
             id="name"
             class="w-full py-1 px-4 text-sm ring-1 ring-black"
           />
@@ -50,6 +52,7 @@
           <input
             type="text"
             name="country"
+            value="{{$country}}"
             id="country"
             class="w-full py-1 px-4 text-sm ring-1 ring-black"
           />
