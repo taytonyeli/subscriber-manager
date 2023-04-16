@@ -27,3 +27,5 @@ Subscriber Routes
 Route::get('/subscribers', [SubscriberController::class, 'showSubscribers']);
 Route::get('/create-subscriber', [SubscriberController::class, 'showAddSubscriber']);
 Route::post('/create-subscriber', [SubscriberController::class, 'addSubscriber']);
+Route::get('/edit-subscriber/{id}', [SubscriberController::class, 'showEditSubscriber']);
+

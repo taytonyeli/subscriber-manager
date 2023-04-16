@@ -75,4 +75,19 @@ class SubscriberController extends Controller
         }
         return response()->view('new-subscriber', $result, 422);
     }
+
+    /**
+     * Show edit subscriber page
+     *
+     *
+     * @return \Illuminate\View\View
+     **/
+    public function showEditSubscriber()
+    {
+        $account = Account::first();
+        if (isset($account)) {
+            return view('edit-subscriber');
+        }
+        return redirect('/');
+    }
 }
