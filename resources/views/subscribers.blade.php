@@ -21,7 +21,7 @@
   <body class="antialiased">
     <main class="container mx-auto p-4">
       <header class="mb-10">
-        <h1 class="text-center text-2xl">Welcome to Your Dashboard</h1>
+        <h1 class="text-center text-2xl">View all Subscribers</h1>
       </header>
       <div>
         <a

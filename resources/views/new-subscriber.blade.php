@@ -21,7 +21,7 @@
   <body class="antialiased">
     <main class="container mx-auto p-4">
       <header class="mb-10">
-        <h1 class="text-center text-2xl">Welcome to Your Dashboard</h1>
+        <h1 class="text-center text-2xl">Add a Subscriber</h1>
       </header>
       <form method="POST" action="/create-subscriber" class="mx-auto w-1/2">
         <div class="mt-3">
