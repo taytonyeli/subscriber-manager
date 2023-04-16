@@ -151,7 +151,7 @@ class MailerLiteClient
         if ($response->status() === 200) {
             return [
                 "message" => "Successfully Updated Subscriber",
-                "data" => $response->json()["data"]
+                "data" => $response->json()["data"],
             ];
         }
         if ($response->status() === 422) {
@@ -182,5 +182,32 @@ class MailerLiteClient
             return true;
         }
         return false;
+    }
+
+    /**
+     * Gets a subscriber by id
+     *
+     * @param string $subscriberId subscriber id
+     * @return boolean
+     **/
+    public function getSubscriber($subscriberId)
+    {
+        $getSubscriberEndPoint = "/api/subscribers/" . $subscriberId;
+        $response = Http::withHeaders([
+            'Authorization' => "Bearer $this->apiKey",
+        ])->withOptions([
+            'verify' => false,
+        ])->get(self::MAILER_LITE_API_HOST . $getSubscriberEndPoint);
+
+        if ($response->status() === 200) {
+            return [
+                "message" => "Subscriber found",
+                "data" => $response->json()["data"],
+            ];
+        }
+        return [
+            "errors" => [],
+            "message" => "No subscribers found",
+        ];
     }
 }
