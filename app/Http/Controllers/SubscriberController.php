@@ -82,13 +82,16 @@ class SubscriberController extends Controller
      *
      * @return \Illuminate\View\View
      **/
-    public function showEditSubscriber()
+    public function showEditSubscriber($id)
     {
         $account = Account::first();
-        if (isset($account)) {
-            return view('edit-subscriber');
+        if (!isset($account)) {
+            return redirect('/');
         }
-        return redirect('/');
+        $mailerLiteCLient = new MailerLiteClient($account->api_key);
+        $subscriber = $mailerLiteCLient->getSubscriber($id);
+        return view('edit-subscriber', $subscriber["data"]);
+        
     }
 
     /**
@@ -121,12 +124,14 @@ class SubscriberController extends Controller
             $name,
             $country
         );
-        $result = $mailerLiteCLient->updateSubscriber($id,$subscriber);
+        $result = $mailerLiteCLient->updateSubscriber($id, $subscriber);
 
         if (!isset($result["errors"])) {
-            return response()->view('edit-subscriber', $result, 200);
+            // return redirect()->route('editSubscriber', ['id' => $id], 200);
+            return redirect("/subscribers");
         }
-        return response()->view('edit-subscriber', $result, 422);
+        dd($result);
+        return redirect()->route('editSubscriber', ['id' => $id])->withInput()->with($result);
     }
 
 }

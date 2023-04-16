@@ -199,10 +199,19 @@ class MailerLiteClient
             'verify' => false,
         ])->get(self::MAILER_LITE_API_HOST . $getSubscriberEndPoint);
 
+        // pick needed data
+        $fullSubscriberData = $response->json()["data"];
+        $requiredSubscriberData = [
+            "id" => $fullSubscriberData["id"],
+            "email" => $fullSubscriberData["email"],
+            "name" => $fullSubscriberData["fields"]["name"],
+            "country" => $fullSubscriberData["fields"]["country"],
+        ];
+
         if ($response->status() === 200) {
             return [
                 "message" => "Subscriber found",
-                "data" => $response->json()["data"],
+                "data" => $requiredSubscriberData,
             ];
         }
         return [
