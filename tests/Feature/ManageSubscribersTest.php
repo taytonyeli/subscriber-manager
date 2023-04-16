@@ -236,7 +236,7 @@ class ManageSubscribersTest extends TestCase
         $subscriberEmail = $subscriber["email"];
 
         // update using api
-        $subscriberResponse = $this->put('/edit-subscriber/' . $subscriberId, [
+        $subscriberResponse = $this->post('/edit-subscriber/' . $subscriberId, [
             "email" => $subscriberEmail,
             "name" => $faker->name(),
             "country" => $faker->country(),
@@ -244,7 +244,7 @@ class ManageSubscribersTest extends TestCase
         
 
         // check success
-        $subscriberResponse->assertStatus(200);
+        $subscriberResponse->assertRedirect();
 
         $account->delete();
         $this->assertDeleted($account);
@@ -279,6 +279,8 @@ class ManageSubscribersTest extends TestCase
         $subscriber = $result["data"];
         $this->assertArrayHasKey("id", $subscriber);
         $this->assertArrayHasKey("email", $subscriber);
+        $this->assertArrayHasKey("name", $subscriber);
+        $this->assertArrayHasKey("country", $subscriber);
         $this->assertEquals($subscriberId, $subscriber["id"]);
 
     }
