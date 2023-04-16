@@ -38,6 +38,7 @@ class DataTablesTest extends TestCase
             'recordsTotal',
             'recordsFiltered',
             'data',
+            'page',
         ]);
         $account->delete();
 
@@ -73,13 +74,15 @@ class DataTablesTest extends TestCase
      */
     public function test_subscriber_response_has_right_data_structure()
     {
+        $length = 10;
+        $start = 30;
         $account = Account::factory()->create([
             'api_key' => env('MAILER_LITE_API_KEY', '1111'),
         ]);
         $params = http_build_query([
             "draw" => 7,
-            "length" => 10,
-            "start" => 30,
+            "length" => $length,
+            "start" => $start,
         ]);
         $response = $this->get('/api/v1/subscribers?' . $params);
 
@@ -95,10 +98,14 @@ class DataTablesTest extends TestCase
                     'country',
                     'subscribed_at_date',
                     'subscribed_at_time',
-                    'DT_RowId'
+                    'DT_RowId',
                 ],
             ],
+            'page',
         ]);
+        $expectedLength = $response->json()["recordsTotal"] - $start < $length ? $response->json()["recordsTotal"] - $start : $length;
+        $response->assertJsonCount($expectedLength, "data");
+        $response->assertJsonPath('page', ((int) floor($start / $length)) + 1);
         $account->delete();
 
     }
