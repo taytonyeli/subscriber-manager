@@ -178,7 +178,7 @@ class ManageSubscribersTest extends TestCase
         $this->assertArrayHasKey("id", $subscriber);
         $this->assertArrayHasKey("email", $subscriber);
         $subscriberId = $subscriber["id"];
-        $subscriberEmail = $subscriber["id"];
+        $subscriberEmail = $subscriber["email"];
 
         // create subscriber to update
         $subscriber = new MailerLiteSubscriber(
@@ -200,6 +200,7 @@ class ManageSubscribersTest extends TestCase
         // check data actually updated
         $updatedData = $result["data"];
         $this->assertArrayHasKey("fields", $updatedData);
+        $this->assertEquals($subscriber->email, $updatedData["email"]);
         $this->assertEquals($subscriber->fields->name, $updatedData["fields"]["name"]);
         $this->assertEquals($subscriber->fields->country, $updatedData["fields"]["country"]);
 
@@ -214,6 +215,9 @@ class ManageSubscribersTest extends TestCase
     public function test_updating_subscriber_via_api()
     {
         // initial setup
+        $account = Account::factory()->create([
+            'api_key' => env('MAILER_LITE_API_KEY', '1111'),
+        ]);
         $faker = Factory::create();
         $mailerLiteCLient = new MailerLiteClient(env('MAILER_LITE_API_KEY', '1111'));
 
@@ -229,20 +233,21 @@ class ManageSubscribersTest extends TestCase
         $this->assertArrayHasKey("id", $subscriber);
         $this->assertArrayHasKey("email", $subscriber);
         $subscriberId = $subscriber["id"];
-        $subscriberEmail = $subscriber["id"];
-
-        // create subscriber to update
-        $subscriber = new MailerLiteSubscriber(
-            $subscriberEmail,
-            $faker->name(),
-            $faker->country()
-        );
+        $subscriberEmail = $subscriber["email"];
 
         // update using api
-        $subscriberResponse = $this->put('/api/v1/subscribers/' . $subscriberId);
+        $subscriberResponse = $this->put('/edit-subscriber/' . $subscriberId, [
+            "email" => $subscriberEmail,
+            "name" => $faker->name(),
+            "country" => $faker->country(),
+        ]);
+        
 
         // check success
         $subscriberResponse->assertStatus(200);
+
+        $account->delete();
+        $this->assertDeleted($account);
 
 
     }
