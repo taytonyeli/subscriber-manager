@@ -40,7 +40,7 @@ class SubscriberController extends Controller
     }
 
     /**
-     * Add New Subscriber API Key
+     * Add New Subscriber
      *
      *
      * @param Illuminate\Http\Request $request Request object
@@ -90,4 +90,43 @@ class SubscriberController extends Controller
         }
         return redirect('/');
     }
+
+    /**
+     * Update Subscriber
+     *
+     *
+     * @param string $id subscriber id
+     * @param Illuminate\Http\Request $request Request object
+     * @return Illuminate\Http\Response
+     **/
+    public function updateSubscriber($id, Request $request)
+    {
+        $request->validate([
+            'email' => 'bail|email|required|max:255',
+            'name' => 'bail|required|max:255',
+            'country' => 'required|max:255',
+        ]);
+
+        $email = $request->input('email');
+        $name = $request->input('name');
+        $country = $request->input('country');
+
+        $account = Account::first();
+        if (!isset($account)) {
+            return redirect('/');
+        }
+        $mailerLiteCLient = new MailerLiteClient($account->api_key);
+        $subscriber = new MailerLiteSubscriber(
+            $email,
+            $name,
+            $country
+        );
+        $result = $mailerLiteCLient->updateSubscriber($id,$subscriber);
+
+        if (!isset($result["errors"])) {
+            return response()->view('edit-subscriber', $result, 200);
+        }
+        return response()->view('edit-subscriber', $result, 422);
+    }
+
 }

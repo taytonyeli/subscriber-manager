@@ -23,14 +23,26 @@ class MailerLiteSubscriber
     }
 
     /**
-     * save subscriber in MailerLite
+     * Get request body for save subscriber in MailerLite
      *
      * @return array
      **/
-    public function getAsArrayForAPI()
+    public function getAsArrayForCreateAPI()
     {
         $data = (array) $this;
         $data["fields"] = (array) $data["fields"];
+        return $data;
+    }
+
+    /**
+     * Get request body for update subscriber in MailerLite
+     *
+     * @return array
+     **/
+    public function getAsArrayForUpdateAPI()
+    {
+        $data = [];
+        $data["fields"] = (array) $this->fields;
         return $data;
     }
 }

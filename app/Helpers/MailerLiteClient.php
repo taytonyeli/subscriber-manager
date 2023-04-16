@@ -94,7 +94,7 @@ class MailerLiteClient
     }
 
     /**
-     * Retrieves total subscriber count
+     * Creates a subscriber
      *
      * @param \App\Models\MailerLiteSubscriber $subscriber subscriber object
      *
@@ -107,17 +107,15 @@ class MailerLiteClient
             'Authorization' => "Bearer $this->apiKey",
         ])->withOptions([
             'verify' => false,
-        ])->post(self::MAILER_LITE_API_HOST . $createSubscriberEndPoint, $subscriber->getAsArrayForAPI());
+        ])->post(self::MAILER_LITE_API_HOST . $createSubscriberEndPoint, $subscriber->getAsArrayForCreateAPI());
 
         if ($response->status() === 201) {
-            return
-                [
+            return [
                 "message" => "Successfully Created Subscriber",
             ];
         }
         if ($response->status() === 200) {
-            return
-                [
+            return [
                 "errors" => [
                     "email" => ["Subscriber with email $subscriber->email already exists"],
                 ],
@@ -127,19 +125,46 @@ class MailerLiteClient
         if ($response->status() === 422) {
             return $response->json();
         }
-        return
-            [
-            "errors" => [
-                "email" => ["Subscriber with email $subscriber->email already exists"],
-            ],
+        return [
+            "errors" => [],
             "message" => "There was an error processing your request",
         ];
     }
 
-    
+    /**
+     * Updates a subscriber by id
+     *
+     *  @param string $subscriberId subscriber id
+     * @param \App\Models\MailerLiteSubscriber $subscriber subscriber object
+     *
+     * @return int
+     **/
+    public function updateSubscriber($subscriberId, $subscriber)
+    {
+        $updateSubscriberEndPoint = "/api/subscribers/" . $subscriberId;
+        $response = Http::withHeaders([
+            'Authorization' => "Bearer $this->apiKey",
+        ])->withOptions([
+            'verify' => false,
+        ])->put(self::MAILER_LITE_API_HOST . $updateSubscriberEndPoint, $subscriber->getAsArrayForUpdateAPI());
+
+        if ($response->status() === 200) {
+            return [
+                "message" => "Successfully Updated Subscriber",
+                "data" => $response->json()["data"]
+            ];
+        }
+        if ($response->status() === 422) {
+            return $response->json();
+        }
+        return [
+            "errors" => [],
+            "message" => "There was an error processing your request",
+        ];
+    }
 
     /**
-     * Delete a subscriber by id
+     * Deletes a subscriber by id
      *
      * @param string $subscriberId subscriber id
      * @return boolean
