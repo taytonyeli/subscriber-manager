@@ -60,7 +60,7 @@ class ManageSubscribersTest extends TestCase
         $result = $mailerLiteCLient->createSubscriber($subscriber);
         // dd($result);
         $this->assertIsArray($result);
-        $this->assertArrayHasKey("message", $result);
+        $this->assertArrayHasKey("data", $result);
         $this->assertArrayNotHasKey("errors", $result);
         $this->assertStringContainsString("Created", $result["message"]);
 
@@ -84,7 +84,7 @@ class ManageSubscribersTest extends TestCase
                 "name" => $faker->name(),
                 "country" => $faker->country(),
             ]);
-        $subscriberResponse->assertStatus(200);
+        $subscriberResponse->assertStatus(302);
 
         $account->delete();
         $this->assertDeleted($account);
