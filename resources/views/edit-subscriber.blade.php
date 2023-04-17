@@ -21,7 +21,10 @@
   <body class="antialiased">
     <main class="container mx-auto p-4">
       <header class="mb-10">
+        <header class="mb-10">
+        <h1><a href="/subscribers">Home</a></h1>
         <h1 class="text-center text-2xl">Edit a subscriber</h1>
+      </header>
       </header>
       <form method="POST" action="/edit-subscriber/{{$id}}" class="mx-auto w-1/2">
         <div class="mt-3">

@@ -21,17 +21,29 @@
   <body class="antialiased">
     <main class="container mx-auto p-4">
       <header class="mb-10">
-        <h1 class="text-center text-2xl">Add a Subscriber</h1>
+        <h1><a href="/subscribers">Home</a></h1>
+        <h2 class="text-center text-2xl">Add a Subscriber</h1>
       </header>
+      @if(session('message'))
+        <div class="alert alert-error shadow-lg">{{session('message')}}</div>
+      @endif
+      @if(session('data'))
+        <div class="alert alert-success shadow-lg">{{session('data')}}</div>
+      @endif
       <form method="POST" action="/create-subscriber" class="mx-auto w-1/2">
         <div class="mt-3">
-          <label for="email" class="w-full">Email:</label>
+
+          <label for="email" class="w-full mt-3">Email:</label>
           <input
-            type="email"
+            type="text"
             name="email"
             id="email"
-            class="w-full py-1 px-4 text-sm ring-1 ring-black"
+            value="{{ old('email') }}"
+            class="w-full py-1 px-4 text-sm ring-1 ring-black @error('email') ring-red-600 @enderror"
           />
+          @error('email')
+            <p class="text-sm text-red-600">{{ $message }}</p>
+          @enderror
         </div>
 
         <div class="mt-3">
@@ -40,8 +52,12 @@
             type="text"
             name="name"
             id="name"
-            class="w-full py-1 px-4 text-sm ring-1 ring-black"
+            value="{{ old('name') }}"
+            class="w-full py-1 px-4 text-sm ring-1 ring-black @error('name') ring-red-600 @enderror"
           />
+          @error('name')
+            <p class="text-sm text-red-600">{{ $message }}</p>
+          @enderror
         </div>
 
         <div class="mt-3">
@@ -50,8 +66,12 @@
             type="text"
             name="country"
             id="country"
+            value="{{ old('country') }}"
             class="w-full py-1 px-4 text-sm ring-1 ring-black"
           />
+          @error('country')
+            <p class="text-sm text-red-600 @error('country') ring-red-600 @enderror">{{ $message }}</p>
+          @enderror
         </div>
 
         <button
@@ -61,6 +81,7 @@
         >
           Create
         </button>
+        {{ dd(session()->all()) }}
       </form>
     </main>
 

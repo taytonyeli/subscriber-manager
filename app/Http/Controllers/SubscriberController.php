@@ -71,9 +71,13 @@ class SubscriberController extends Controller
         $result = $mailerLiteCLient->createSubscriber($subscriber);
 
         if (!isset($result["errors"])) {
-            return response()->view('new-subscriber', $result, 200);
+            return redirect("create-subscriber")->with("data", $result["data"]);
         }
-        return response()->view('new-subscriber', $result, 422);
+        // dd($result);
+        return redirect("create-subscriber")
+            ->with("message", $result["message"])
+            ->withErrors($result["errors"])
+            ->withInput();
     }
 
     /**
@@ -91,7 +95,7 @@ class SubscriberController extends Controller
         $mailerLiteCLient = new MailerLiteClient($account->api_key);
         $subscriber = $mailerLiteCLient->getSubscriber($id);
         return view('edit-subscriber', $subscriber["data"]);
-        
+
     }
 
     /**

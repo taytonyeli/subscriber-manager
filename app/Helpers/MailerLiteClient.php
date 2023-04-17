@@ -176,7 +176,7 @@ class MailerLiteClient
 
         if ($response->status() === 201) {
             return [
-                "message" => "Successfully Created Subscriber",
+                "data" => "Successfully Created Subscriber",
             ];
         }
         if ($response->status() === 200) {

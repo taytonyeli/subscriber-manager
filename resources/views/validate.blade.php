@@ -15,19 +15,21 @@
             <h1 class="text-center text-2xl">
                 Welcome to MailerLite Subscriber Manager
             </h1>
-            <form method="POST" action="/" class="w-1/2">
+            <form method="POST" action="/" class="mx-auto w-1/2">
                 @isset($api_errors)
-                    <div class="alert alert-danger">Invalid API Key</div>
+                    <div class="alert alert-error shadow-lg">Invalid API Key</div>
                 @endisset
-                <label for="apiKey" class="display-block w-full"
-                    >Enter Your Mailer Lite API Key:</label
-                >
-                <textarea
-                    id="apiKey"
-                    class="display-block w-full ring-2 ring-black"
-                    name="apiKey"
-                    rows="5"
-                ></textarea>
+                <div class="mt-3">
+                    <label for="apiKey" class="display-block w-full"
+                        >Enter Your Mailer Lite API Key:</label
+                    >
+                    <textarea
+                        id="apiKey"
+                        class="display-block w-full ring-2 ring-black"
+                        name="apiKey"
+                        rows="5"
+                    ></textarea>
+                </div>
                 <button
                     id="validate-submit"
                     type="submit"
