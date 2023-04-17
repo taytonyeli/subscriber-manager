@@ -22,27 +22,27 @@ class SubscriberApiController extends Controller
             'draw' => 'nullable|numeric|max:1024',
             'length' => 'nullable|numeric|max:200',
             'start' => 'nullable|numeric|max:1024',
+            'search.value' => 'nullable|max:50',
         ]);
         $account = Account::first();
         $mailerLiteCLient = new MailerLiteClient($account->api_key);
 
         $length = $request->has('length') ? $request->query('length') : 25;
         $start = $request->has('start') ? $request->query('start') : 0;
-
+        $query = $request->has('search') && isset($request->query('search')["value"]) ? $request->query('search')["value"] : "";
 
         $count = $mailerLiteCLient->getSubscriberCount();
 
         $dataTablesHelper = new DataTablesHelper($request->query('draw'), $length, $start);
 
-
-        $data = $mailerLiteCLient->getSubscribers($length, $dataTablesHelper->getMailerLitePage());
+        $data = $mailerLiteCLient->searchSubscribers($length, $dataTablesHelper->getMailerLitePage(), $query, $count);
 
         $finalResponse = [
             'draw' => $dataTablesHelper->getDraw(),
             'data' => $dataTablesHelper->getStructuredData($data),
             'recordsTotal' => $count,
             'recordsFiltered' => $count,
-            'page' => $dataTablesHelper->getMailerLitePage()
+            'page' => $dataTablesHelper->getMailerLitePage(),
         ];
         return response()->json($finalResponse);
     }

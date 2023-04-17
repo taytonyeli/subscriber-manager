@@ -2,6 +2,7 @@
 namespace App\Helpers;
 
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Str;
 
 class MailerLiteClient
 {
@@ -80,6 +81,55 @@ class MailerLiteClient
             }
         }
 
+        return $subscribers;
+    }
+
+    /**
+     * Fetches a list of subscribers which match search query
+     *
+     *
+     * @param int $limit max number of items returned
+     * @param int $page desired page
+     * @param string $query search query
+     * @param int $total total sub count
+     * @return array
+     **/
+    public function searchSubscribers(int $limit = 25, int $page = 1, string $query = "", int $total)
+    {
+        $getSubscribersEndPoint = "/api/subscribers";
+
+        $fullSubscribers = [];
+
+        $requestParams = [];
+        $requestParams["limit"] = $total;
+
+        // LESS CRAZY WAY TO GET PAGES BECAUSE API HAS NO SKIP, FETCH ALL AND PAGINATE BACKEND
+        $response = Http::withHeaders([
+            'Authorization' => "Bearer $this->apiKey",
+        ])->withOptions([
+            'verify' => false,
+        ])->get(self::MAILER_LITE_API_HOST . $getSubscribersEndPoint, $requestParams);
+
+        if ($response->ok()) {
+            $subscriberResponse = $response->json();
+            $fullSubscribers = $subscriberResponse["data"];
+        }
+
+        $fullSubscriberCollection = collect($fullSubscribers);
+        $filtered = $fullSubscriberCollection;
+        // search if necessary
+        if (!empty($query)) {
+            $filtered = $fullSubscriberCollection->filter(function ($value, $key) use (&$query) {
+                return Str::contains($value["email"], $query);
+            });
+        }
+        // chunk if more than page length
+        $chunk = $filtered;
+        if ($filtered->count() > $limit) {
+            $chunk = $filtered->forPage($page, $limit);
+        }
+        // return subs as array
+        $subscribers = $chunk->values()->toArray();
 
         return $subscribers;
     }
