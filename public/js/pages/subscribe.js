@@ -5,7 +5,12 @@ $(document).ready(function () {
         processing: true,
         ajax: '/api/v1/subscribers',
         columns: [
-            { data: 'email' },
+            {
+                data: 'email',
+                render: function (data, type, row, meta) {
+                    return `<a href="/edit-subscriber/${row.DT_RowId}" class="underline">${data}</a>`
+                }
+            },
             { data: 'name' },
             { data: 'country' },
             { data: 'subscribed_at_date' },
@@ -15,11 +20,6 @@ $(document).ready(function () {
                 orderable: false,
                 data: null,
                 defaultContent: `
-                <button
-                  class="edit-action rounded-sm py-1 px-4 text-center text-black ring-1 ring-blue-500 bg-blue-500"
-                >
-                  Edit
-                </button>
                 <button
                   class="del-action rounded-sm mt-2 py-1 px-4 text-center text-black ring-1 ring-red-500 bg-red-500"
                 >
@@ -54,16 +54,16 @@ $(document).ready(function () {
     )
 
     // add click listener for edit action
-    $('#subscribers-table tbody').on(
-        'click',
-        'tr td.actions-control .edit-action',
-        function () {
-            let tr = $(this).closest('tr')
-            let id = tr.attr('id')
-            // redirect to edit page with id in path
-            window.location.href = `/edit-subscriber/${id}`
-        }
-    )
+    // $('#subscribers-table tbody').on(
+    //     'click',
+    //     'tr td.actions-control .edit-action',
+    //     function () {
+    //         let tr = $(this).closest('tr')
+    //         let id = tr.attr('id')
+    //         // redirect to edit page with id in path
+    //         window.location.href = `/edit-subscriber/${id}`
+    //     }
+    // )
 
     async function deleteSubscriber (id) {
         if (!!!id) {
