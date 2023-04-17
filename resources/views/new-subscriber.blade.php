@@ -81,7 +81,6 @@
         >
           Create
         </button>
-        {{ dd(session()->all()) }}
       </form>
     </main>
 
